@@ -1,0 +1,81 @@
+/* ============ GLOBAL STYLE PREMIUM ============ */
+body {
+    background: linear-gradient(135deg, #d1eaff, #f7faff);
+    font-family: 'Poppins', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    color: #1a1a1a;
+}
+
+h1, h2, h3, h4, h5 {
+    letter-spacing: 0.5px;
+    font-weight: 700;
+}
+
+/* ============ TABLE HOVER ============ */
+.table-hover tbody tr:hover {
+    background:#e9f5ff !important;
+    transition: 0.25s ease-in-out;
+}
+
+/* ============ CARD & ALERT ROUNDING ============ */
+.card, .alert {
+    border-radius: 18px !important;
+    border: none !important;
+}
+
+/* ============ BUTTONS ============ */
+.btn {
+    font-weight: 600;
+    letter-spacing: .3px;
+    transition: 0.25s;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+}
+
+/* BUTTON OUTLINE HOVER EFFECT */
+.btn-outline-primary:hover,
+.btn-outline-info:hover,
+.btn-outline-danger:hover,
+.btn-outline-warning:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+/* BUTTON PILL STYLE DEFAULT */
+.btn-pill {
+    border-radius: 50px !important;
+    padding: 10px 22px !important;
+}
+
+/* ============ TABLE BORDER RADIUS ============ */
+table.table {
+    border-radius: 14px !important;
+    overflow:hidden;
+}
+
+/* ============ BADGE STYLE ============ */
+.badge {
+    font-size: 14px;
+    border-radius: 14px;
+    padding: 6px 12px;
+}
+
+/* ============ GLASS EFFECT UTILITY ============ */
+.glass {
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(10px);
+    border-radius: 18px;
+    padding: 18px;
+}
+
+/* ============ INPUT FORM STYLE ============ */
+input, textarea, select {
+    border-radius: 12px !important;
+}
+
+input:focus, textarea:focus, select:focus {
+    border-color: #0d6efd !important;
+    box-shadow: 0 0 0 4px rgba(13,110,253,0.15) !important;
+}
