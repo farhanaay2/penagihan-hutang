@@ -9,8 +9,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('payments', function (Blueprint $table) {
-            if (!Schema::hasColumn('payments', 'proof_path')) {
-                $table->string('proof_path')->nullable()->after('note');
+            if (!Schema::hasColumn('payments', 'recorded_by')) {
+                $table->string('recorded_by')->default('customer')->after('is_verified'); // customer|admin
             }
         });
     }
@@ -18,8 +18,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('payments', function (Blueprint $table) {
-            if (Schema::hasColumn('payments', 'proof_path')) {
-                $table->dropColumn('proof_path');
+            if (Schema::hasColumn('payments', 'recorded_by')) {
+                $table->dropColumn('recorded_by');
             }
         });
     }

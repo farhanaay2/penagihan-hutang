@@ -9,16 +9,25 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('phone')->nullable()->unique()->after('email');
-            $table->string('role')->default('customer')->after('phone'); // admin atau customer
+            if (!Schema::hasColumn('users', 'phone')) {
+                $table->string('phone')->nullable()->unique()->after('email');
+            }
+            if (!Schema::hasColumn('users', 'role')) {
+                $table->string('role')->default('customer')->after('phone'); // admin atau customer
+            }
         });
     }
 
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropUnique(['phone']);
-            $table->dropColumn(['phone', 'role']);
+            if (Schema::hasColumn('users', 'phone')) {
+                $table->dropUnique(['phone']);
+                $table->dropColumn('phone');
+            }
+            if (Schema::hasColumn('users', 'role')) {
+                $table->dropColumn('role');
+            }
         });
     }
 };

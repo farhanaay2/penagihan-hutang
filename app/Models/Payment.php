@@ -17,6 +17,7 @@ class Payment extends Model
         'proof_path',
         'is_verified',
         'verified_at',
+        'recorded_by',
     ];
 
     protected $casts = [

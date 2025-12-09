@@ -17,8 +17,9 @@
     @endif
 
     @php
-        $totalBayar = $debt->payments->sum('amount');
-        $sisa = max(0, ($debt->total_pengembalian ?: $debt->amount) - $totalBayar);
+        $userPayments  = $debt->payments->where('recorded_by', 'customer');
+        $totalBayarUser = $userPayments->sum('amount');
+        $sisa = max(0, ($debt->total_pengembalian ?: $debt->amount) - $totalBayarUser);
     @endphp
 
     <div class="row g-3">
@@ -70,7 +71,7 @@
                 <div class="card-body">
                     <div class="mb-2">
                         <div class="text-muted small">Total Dibayar</div>
-                        <div class="fs-4 fw-semibold text-success">Rp {{ number_format($totalBayar, 0, ',', '.') }}</div>
+                        <div class="fs-4 fw-semibold text-success">Rp {{ number_format($totalBayarUser, 0, ',', '.') }}</div>
                     </div>
                     <div class="mb-2">
                         <div class="text-muted small">Sisa Tagihan</div>
@@ -101,16 +102,22 @@
                         <th>Tanggal</th>
                         <th>Nominal</th>
                         <th>Catatan</th>
+                        <th>Sumber</th>
                         <th>Bukti</th>
                         <th>Verifikasi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ($debt->payments as $payment)
+                    @forelse ($userPayments as $payment)
                         <tr>
                             <td>{{ \Illuminate\Support\Carbon::parse($payment->date)->format('d M Y') }}</td>
                             <td>Rp {{ number_format($payment->amount, 0, ',', '.') }}</td>
                             <td>{{ $payment->note ?? '-' }}</td>
+                            <td>
+                                <span class="badge {{ ($payment->recorded_by ?? 'customer') === 'admin' ? 'bg-secondary' : 'bg-info text-dark' }}">
+                                    {{ ($payment->recorded_by ?? 'customer') === 'admin' ? 'Admin' : 'User' }}
+                                </span>
+                            </td>
                             <td>
                                 @if($payment->proof_path)
                                     <a href="{{ asset('storage/'.$payment->proof_path) }}" target="_blank">Lihat</a>

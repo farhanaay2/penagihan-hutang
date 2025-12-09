@@ -55,6 +55,7 @@ class ClientPaymentController extends Controller
             'note'       => $data['note'] ?? null,
             'proof_path' => $path,
             'is_verified'=> false,
+            'recorded_by'=> 'customer',
         ]);
 
         return redirect()

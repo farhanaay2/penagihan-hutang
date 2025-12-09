@@ -9,17 +9,31 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('customers', function (Blueprint $table) {
-            $table->string('email')->nullable()->unique()->after('phone');
-            $table->string('password')->nullable()->after('email');
-            $table->rememberToken()->after('password');
+            if (!Schema::hasColumn('customers', 'email')) {
+                $table->string('email')->nullable()->unique()->after('phone');
+            }
+            if (!Schema::hasColumn('customers', 'password')) {
+                $table->string('password')->nullable()->after('email');
+            }
+            if (!Schema::hasColumn('customers', 'remember_token')) {
+                $table->rememberToken()->after('password');
+            }
         });
     }
 
     public function down(): void
     {
         Schema::table('customers', function (Blueprint $table) {
-            $table->dropUnique(['email']);
-            $table->dropColumn(['email', 'password', 'remember_token']);
+            if (Schema::hasColumn('customers', 'email')) {
+                $table->dropUnique(['email']);
+                $table->dropColumn('email');
+            }
+            if (Schema::hasColumn('customers', 'password')) {
+                $table->dropColumn('password');
+            }
+            if (Schema::hasColumn('customers', 'remember_token')) {
+                $table->dropColumn('remember_token');
+            }
         });
     }
 };

@@ -263,6 +263,7 @@ class ClientController extends Controller
             ->whereHas('debt', function ($query) use ($customer) {
                 $query->where('customer_id', $customer->id);
             })
+            ->where('recorded_by', 'customer')
             ->orderByDesc('date')
             ->orderByDesc('created_at')
             ->get();

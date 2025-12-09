@@ -56,7 +56,10 @@
                 <tbody>
                     @forelse ($debts as $debt)
                         @php
-                            $totalPaid = $debt->payments->where('is_verified', true)->sum('amount');
+                            $totalPaid = $debt->payments
+                                ->where('is_verified', true)
+                                ->where('recorded_by', 'customer')
+                                ->sum('amount');
                         @endphp
                         <tr>
                             <td>{{ $loop->iteration }}</td>

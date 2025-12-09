@@ -76,39 +76,27 @@ class ClientAuthController extends Controller
     }
 
     public function login(Request $request)
-{
-    $credentials = $request->validate([
-        'login'    => ['required', 'string'],
-        'password' => ['required', 'string'],
-    ]);
+    {
+        $credentials = $request->validate([
+            'login'    => ['required', 'string'],
+            'password' => ['required', 'string'],
+        ]);
 
-    // selalu pakai email untuk login
-    $loginField = 'email';
+        $loginField = str_contains($credentials['login'], '@') ? 'email' : 'phone';
 
-    // cari user berdasarkan email
-    $user = User::where($loginField, $credentials['login'])->first();
+        $client = Customer::where($loginField, $credentials['login'])->first();
 
-    if ($user && Hash::check($credentials['password'], $user->password)) {
-
-        // ambil data customer berdasarkan user_id
-        $customer = Customer::where('user_id', $user->id)->first();
-
-        // login user
-        Auth::guard('client')->login($user);
-        $request->session()->regenerate();
-
-        if ($customer) {
-            $request->session()->put('client_customer_id', $customer->id);
+        if ($client && $client->password && Hash::check($credentials['password'], $client->password)) {
+            Auth::guard('client')->login($client, $request->boolean('remember'));
+            $request->session()->regenerate();
+            $request->session()->put('client_customer_id', $client->id);
+            return redirect()->intended(route('client.loans.index'));
         }
 
-        return redirect()->intended(route('client.loans.index'));
+        return back()->withErrors([
+            'login' => 'Kredensial tidak cocok.',
+        ])->onlyInput('login');
     }
-
-    return back()->withErrors([
-        'login' => 'Kredensial tidak cocok.',
-    ])->onlyInput('login');
-}
-
 
     public function logout(Request $request)
     {

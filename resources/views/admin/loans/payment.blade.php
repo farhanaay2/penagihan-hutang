@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="container py-4" style="max-width: 720px;">
-    <h2 class="fw-bold mb-3">Input Pembayaran</h2>
+    <h2 class="fw-bold mb-3">Pencatatan Pembayaran Admin</h2>
     <p class="text-muted mb-3">Debitur: <strong>{{ $debt->customer->name ?? '-' }}</strong> | Pinjaman: Rp {{ number_format($debt->amount,0,',','.') }}</p>
 
     @if($errors->any())
@@ -19,6 +19,7 @@
 
     <div class="card shadow-sm border-0 rounded-4">
         <div class="card-body">
+            <h5 class="fw-bold mb-3">Form Pencatatan Pembayaran</h5>
             <form action="{{ route('admin.loans.payment.store', $debt) }}" method="POST">
                 @csrf
                 <div class="mb-3">

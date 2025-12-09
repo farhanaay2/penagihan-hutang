@@ -33,11 +33,24 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('debts', function (Blueprint $table) {
-            $table->dropColumn(['approval_status', 'approved_at', 'rejected_reason']);
+            if (Schema::hasColumn('debts', 'approval_status')) {
+                $table->dropColumn('approval_status');
+            }
+            if (Schema::hasColumn('debts', 'approved_at')) {
+                $table->dropColumn('approved_at');
+            }
+            if (Schema::hasColumn('debts', 'rejected_reason')) {
+                $table->dropColumn('rejected_reason');
+            }
         });
 
         Schema::table('payments', function (Blueprint $table) {
-            $table->dropColumn(['is_verified', 'verified_at']);
+            if (Schema::hasColumn('payments', 'is_verified')) {
+                $table->dropColumn('is_verified');
+            }
+            if (Schema::hasColumn('payments', 'verified_at')) {
+                $table->dropColumn('verified_at');
+            }
         });
     }
 };

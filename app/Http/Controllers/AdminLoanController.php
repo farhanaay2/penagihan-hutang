@@ -63,12 +63,15 @@ class AdminLoanController extends Controller
         $data['debt_id']     = $debt->id;
         $data['is_verified'] = true;
         $data['verified_at'] = now();
-
+        $data['recorded_by'] = 'admin';
         Payment::create($data);
 
-        $totalPaid = $debt->payments()->where('is_verified', true)->sum('amount');
-        if ($totalPaid >= $debt->amount) {
+        $totalPaid   = $debt->payments()->where('is_verified', true)->sum('amount');
+        $totalTarget = $debt->total_pengembalian ?: $debt->amount;
+        if ($totalPaid >= $totalTarget) {
             $debt->update(['status' => 'lunas']);
+        } else {
+            $debt->update(['status' => 'belum lunas']);
         }
 
         return redirect()->route('admin.loans.index')->with('success', 'Pembayaran dicatat & terverifikasi.');
@@ -93,9 +96,12 @@ class AdminLoanController extends Controller
 
         // auto-lunas jika total bayar >= amount
         $debt = $payment->debt;
-        $totalPaid = $debt->payments()->where('is_verified', true)->sum('amount');
-        if ($totalPaid >= $debt->amount) {
+        $totalPaid   = $debt->payments()->where('is_verified', true)->sum('amount');
+        $totalTarget = $debt->total_pengembalian ?: $debt->amount;
+        if ($totalPaid >= $totalTarget) {
             $debt->update(['status' => 'lunas']);
+        } else {
+            $debt->update(['status' => 'belum lunas']);
         }
 
         return back()->with('success', 'Pembayaran diverifikasi.');

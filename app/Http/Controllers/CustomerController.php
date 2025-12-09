@@ -38,9 +38,12 @@ class CustomerController extends Controller
     {
         $customer->load(['debts.payments', 'payments']);
 
-        $totalHutang = $customer->debts->sum('amount');            
-        $totalPembayaran = $customer->payments()->where('is_verified', true)->sum('amount');      
-        $sisaHutang = max(0, $totalHutang - $totalPembayaran);      
+        $totalHutang = $customer->debts->sum('amount');
+        // gunakan nama tabel untuk menghindari kolom ambigu
+        $totalPembayaran = $customer->payments()
+            ->where('payments.is_verified', true)
+            ->sum('payments.amount');
+        $sisaHutang = max(0, $totalHutang - $totalPembayaran);
 
         return view('customers.show', compact(
             'customer',
